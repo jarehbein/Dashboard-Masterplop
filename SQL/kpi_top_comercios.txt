@@ -1,0 +1,10 @@
+SELECT 
+    m.mcg_name,
+    SUM(t.amt) AS gasto_total,
+    ROUND((SUM(t.amt) / (SELECT SUM(amt) FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv'))) * 100, 2) AS porcentaje_del_gasto
+FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv') t
+JOIN read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/mcg_list.csv') m 
+  ON t.mcg_id = m.mcg
+GROUP BY 1
+ORDER BY 3 DESC
+LIMIT 10;

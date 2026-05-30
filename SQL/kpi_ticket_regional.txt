@@ -1,0 +1,8 @@
+SELECT 
+    product_name,
+    AVG(amt) AS ticket_promedio
+FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv')
+WHERE (UPPER(product_type) LIKE '%CRED%' OR UPPER(product_type) LIKE '%CRÉD%')
+  AND ctry_mrch IN ('Chile', 'Argentina', 'Brasil', 'Brazil', 'Colombia', 'Perú', 'Peru', 'Ecuador', 'Bolivia', 'Paraguay', 'Uruguay', 'Venezuela')
+GROUP BY 1
+ORDER BY 2 DESC;

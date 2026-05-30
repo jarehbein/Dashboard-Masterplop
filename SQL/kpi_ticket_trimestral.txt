@@ -1,0 +1,9 @@
+SELECT 
+    CAST(DATE_TRUNC('year', STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) AS DATE) AS fecha_periodo,
+    EXTRACT(QUARTER FROM STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) AS trimestre_numero,
+    SUM(amt) / COUNT(DISTINCT card_id) AS gasto_promedio_por_tarjeta,
+    AVG(amt) AS ticket_promedio_transaccion
+FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv')
+WHERE (UPPER(product_type) LIKE '%CRED%' OR UPPER(product_type) LIKE '%CRÉD%')
+GROUP BY 1, 2
+ORDER BY 1, 2;

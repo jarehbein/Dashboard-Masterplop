@@ -1,0 +1,20 @@
+WITH CashbackPorTarjeta AS (
+    SELECT 
+        card_id,
+        SUM(amt * 0.07) AS cashback_calculado,
+        CASE 
+            WHEN SUM(amt * 0.07) > 50 THEN 50 
+            ELSE SUM(amt * 0.07) 
+        END AS cashback_real
+    FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv')
+    WHERE (UPPER(product_type) LIKE '%CRED%' OR UPPER(product_type) LIKE '%CRÉD%')
+      AND ctry_card = 'Chile' 
+      AND ctry_mrch != 'Chile'
+      AND EXTRACT(MONTH FROM STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) = 5
+      AND EXTRACT(YEAR FROM STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) = 2024
+    GROUP BY card_id
+)
+SELECT 
+    SUM(cashback_real) AS costo_total_campana,
+    COUNT(DISTINCT card_id) AS tarjetas_impactadas
+FROM CashbackPorTarjeta;

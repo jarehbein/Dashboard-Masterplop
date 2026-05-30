@@ -1,0 +1,12 @@
+SELECT 
+    CASE 
+        WHEN UPPER(product_type) LIKE '%CRED%' OR UPPER(product_type) LIKE '%CRÉD%' THEN 'Crédito'
+        WHEN UPPER(product_type) LIKE '%DEB%'  OR UPPER(product_type) LIKE '%DÉB%' THEN 'Débito'
+        ELSE 'Prepago'
+    END AS product_type_limpio,
+    CAST(DATE_TRUNC('year', STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) AS DATE) AS fecha_periodo,
+    EXTRACT(QUARTER FROM STRPTIME(REPLACE(prch_date, '-', '/'), '%d/%m/%Y')) AS trimestre_numero,
+    COUNT(DISTINCT card_id) AS cantidad_tarjetas
+FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv')
+GROUP BY 1, 2, 3
+ORDER BY 2, 3, 1;

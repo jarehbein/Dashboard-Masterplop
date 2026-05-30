@@ -1,0 +1,15 @@
+SELECT 
+	CASE 
+        WHEN UPPER(ctry_mrch) IN ('REPUBLICA DOMINICANA', 'REPÚBLICA DOMINICANA') THEN 'República Dominicana'
+        WHEN UPPER(ctry_mrch) IN ('PANAMA', 'PANAMÁ') THEN 'Panamá'
+        WHEN UPPER(ctry_mrch) IN ('MEXICO', 'MÉXICO') THEN 'México'
+        WHEN UPPER(ctry_mrch) IN ('BRAZIL', 'BRASIL') THEN 'Brasil'
+        WHEN UPPER(ctry_mrch) IN ('PERU', 'PERÚ') THEN 'Perú'
+        ELSE ctry_mrch 
+    END AS pais,
+    SUM(CASE WHEN is_contactless = 1 THEN amt ELSE 0 END) AS gasto_contactless,
+    SUM(amt) AS gasto_total,
+    ROUND((SUM(CASE WHEN is_contactless = 1 THEN amt ELSE 0 END) / SUM(amt)) * 100, 2) AS pct_gasto_contactless
+FROM read_csv_auto('C:/Users/jrehb/OneDrive/Documentos/Desafío Artefact/db_transac.csv')
+GROUP BY 1
+ORDER BY 4 DESC;
